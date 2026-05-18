@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@custom-variant dark {
+  &:where(.dark, .dark *) {
+    @slot;
+  }
+}
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  
+  /* Primary Slate Colors */
+  --color-primary-50: #f8fafc;
+  --color-primary-100: #f1f5f9;
+  --color-primary-200: #e2e8f0;
+  
+  /* Indigo Accents */
+  --color-indigo-50: #f5f3ff;
+  --color-indigo-100: #ede9fe;
+  --color-indigo-500: #6366f1;
+  --color-indigo-600: #4f46e5;
+  --color-indigo-700: #4338ca;
+  
+  /* Custom Animations & Keyframes */
+  --animate-fade-in-up: fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-slide-in-right: slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-pulse-subtle: pulse-subtle 2s infinite ease-in-out;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.01);
+  }
+}
+
+/* Custom Scrollbar Styles for Elegant Dashboard Feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Glassmorphism Premium Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.glass-panel-dark {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Safe Area Insets for Modern Android WebView and Capacitor Web */
+.safe-padding-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+
+/* Responsive Grid Animations */
+.stagger-load > * {
+  opacity: 0;
+  animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.stagger-load > *:nth-child(1) { animation-delay: 0.05s; }
+.stagger-load > *:nth-child(2) { animation-delay: 0.1s; }
+.stagger-load > *:nth-child(3) { animation-delay: 0.15s; }
+.stagger-load > *:nth-child(4) { animation-delay: 0.2s; }
+.stagger-load > *:nth-child(5) { animation-delay: 0.25s; }
+.stagger-load > *:nth-child(6) { animation-delay: 0.3s; }
+.stagger-load > *:nth-child(7) { animation-delay: 0.35s; }
+.stagger-load > *:nth-child(8) { animation-delay: 0.4s; }
