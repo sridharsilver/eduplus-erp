@@ -29,7 +29,7 @@ export const ForgotPassword = () => {
       <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 text-center mb-2 leading-none">
         Recover Password
       </h3>
-      <p className="text-xs text-slate-400 dark:text-slate-500 text-center mb-6 max-w-[240px] mx-auto leading-relaxed">
+      <p className="text-xs text-slate-400 dark:text-slate-400 text-center mb-6 max-w-[240px] mx-auto leading-relaxed">
         Enter your registered email and we'll send a link to reset your password.
       </p>
 
@@ -75,7 +75,7 @@ export const ForgotPassword = () => {
       <div className="mt-6 flex justify-center border-t border-slate-100 dark:border-slate-800 pt-4">
         <Link
           to="/"
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-350 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-300 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Login

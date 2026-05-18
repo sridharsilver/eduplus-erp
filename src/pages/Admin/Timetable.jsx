@@ -56,7 +56,7 @@ export const Timetable = () => {
           <button
             onClick={() => { setViewType("class"); setSelectedTeacher(""); }}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer
-              ${viewType === "class" ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-sm border border-slate-150 dark:border-slate-800" : "text-slate-400 dark:text-slate-550"}`}
+              ${viewType === "class" ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-sm border border-slate-200 dark:border-slate-800" : "text-slate-400 dark:text-slate-500"}`}
           >
             <Users className="w-4 h-4" />
             Class Schedule
@@ -64,7 +64,7 @@ export const Timetable = () => {
           <button
             onClick={() => { setViewType("teacher"); setSelectedTeacher(teachers[0]?.id || ""); }}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer
-              ${viewType === "teacher" ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-sm border border-slate-150 dark:border-slate-800" : "text-slate-400 dark:text-slate-550"}`}
+              ${viewType === "teacher" ? "bg-white dark:bg-slate-900 text-indigo-700 dark:text-indigo-400 shadow-sm border border-slate-200 dark:border-slate-800" : "text-slate-400 dark:text-slate-500"}`}
           >
             <User className="w-4 h-4" />
             Teacher Schedule
@@ -98,13 +98,13 @@ export const Timetable = () => {
             <div key={day} className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-5 shadow-sm space-y-4 transition-colors duration-300">
               <div className="flex items-center justify-between border-b border-slate-50 dark:border-slate-800 pb-2">
                 <h4 className="text-base font-extrabold text-slate-800 dark:text-slate-200 tracking-tight">{day}</h4>
-                <span className="text-[10px] font-bold text-slate-450 dark:text-slate-500 uppercase tracking-widest">
+                <span className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
                   {dayPeriods.length} Periods Scheduled
                 </span>
               </div>
 
               {dayPeriods.length === 0 ? (
-                <div className="py-6 text-center text-xs font-semibold text-slate-400 dark:text-slate-550">
+                <div className="py-6 text-center text-xs font-semibold text-slate-400 dark:text-slate-500">
                   No active periods scheduled for this day.
                 </div>
               ) : (
@@ -120,7 +120,7 @@ export const Timetable = () => {
                           Period {period.period}
                         </span>
                         <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 flex items-center gap-0.5">
-                          <Clock className="w-3 h-3 text-slate-350 dark:text-slate-500" />
+                          <Clock className="w-3 h-3 text-slate-400 dark:text-slate-500" />
                           {period.time}
                         </span>
                       </div>
