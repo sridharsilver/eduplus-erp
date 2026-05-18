@@ -74,7 +74,7 @@ export const AuthLayout = ({ children }) => {
         </div>
 
         {/* Card wrap */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-850 rounded-3xl p-6 md:p-8 shadow-xl shadow-slate-100/50 dark:shadow-none glass-panel dark:glass-panel-dark animate-fade-in-up transition-colors duration-300">
+        <div className="bg-white dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/80 rounded-3xl p-6 md:p-8 shadow-2xl shadow-indigo-100/40 dark:shadow-[0_25px_60px_-15px_rgba(0,0,0,0.85)] glass-panel animate-fade-in-up transition-all duration-300">
           {children}
         </div>
 
