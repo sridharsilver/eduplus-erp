@@ -26,10 +26,10 @@ export const ForgotPassword = () => {
   return (
     <AuthLayout>
       {ToastComponent}
-      <h3 className="text-xl font-bold text-slate-800 text-center mb-2 leading-none">
+      <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 text-center mb-2 leading-none">
         Recover Password
       </h3>
-      <p className="text-xs text-slate-400 text-center mb-6 max-w-[240px] mx-auto leading-relaxed">
+      <p className="text-xs text-slate-400 dark:text-slate-500 text-center mb-6 max-w-[240px] mx-auto leading-relaxed">
         Enter your registered email and we'll send a link to reset your password.
       </p>
 
@@ -62,20 +62,20 @@ export const ForgotPassword = () => {
           </button>
         </form>
       ) : (
-        <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-4 text-center space-y-2 animate-fade-in-up">
-          <p className="text-xs font-bold text-emerald-800">
+        <div className="bg-emerald-50 dark:bg-emerald-950/20 border border-emerald-100 dark:border-emerald-900/40 rounded-2xl p-4 text-center space-y-2 animate-fade-in-up">
+          <p className="text-xs font-bold text-emerald-800 dark:text-emerald-400">
             Check your Inbox!
           </p>
-          <p className="text-[11px] text-emerald-600 leading-normal">
+          <p className="text-[11px] text-emerald-600 dark:text-emerald-400 leading-normal">
             We have sent a reset link to <span className="font-bold">{email}</span>. Click the link to complete the reset.
           </p>
         </div>
       )}
 
-      <div className="mt-6 flex justify-center border-t border-slate-100 pt-4">
+      <div className="mt-6 flex justify-center border-t border-slate-100 dark:border-slate-800 pt-4">
         <Link
           to="/"
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-350 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to Login

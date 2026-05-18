@@ -65,7 +65,7 @@ export const Login = () => {
   return (
     <AuthLayout>
       {ToastComponent}
-      <h3 className="text-xl font-bold text-slate-800 text-center mb-6 leading-none">
+      <h3 className="text-xl font-bold text-slate-800 dark:text-slate-100 text-center mb-6 leading-none">
         Sign In to Portal
       </h3>
 
@@ -84,7 +84,7 @@ export const Login = () => {
                 className={`py-2 px-1 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer capitalize
                   ${role === r 
                     ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/10" 
-                    : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/50"}`}
+                    : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/50 dark:bg-slate-800 dark:border-slate-700/60 dark:text-slate-400 dark:hover:bg-slate-800/80"}`}
               >
                 {r}
               </button>
@@ -119,7 +119,7 @@ export const Login = () => {
         <div className="flex justify-end">
           <Link
             to="/forgot-password"
-            className="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors"
+            className="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors"
           >
             Forgot Password?
           </Link>
