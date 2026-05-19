@@ -26,6 +26,7 @@ export const Students = () => {
 
   // Form Field States
   const [formData, setFormData] = useState({
+    avatar: "",
     name: "",
     class: "",
     rollNumber: "",
@@ -128,6 +129,7 @@ export const Students = () => {
 
   const resetForm = () => {
     setFormData({
+      avatar: "",
       name: "",
       class: classes[0] || "",
       rollNumber: "",
@@ -144,6 +146,25 @@ export const Students = () => {
       feeStatus: "Pending",
       feeAmount: 2500
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Image size must be less than 2MB!", "error");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setFormData((prev) => ({ ...prev, avatar: "" }));
   };
 
   // Filter Logic
@@ -391,6 +412,40 @@ export const Students = () => {
         <form onSubmit={handleAddSubmit} className="space-y-4">
           <div className="space-y-4">
             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Student Information</h4>
+            {/* Profile Photo Upload */}
+            <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <div className="relative flex-shrink-0">
+                <img
+                  src={formData.avatar || "https://images.unsplash.com/photo-1597003890212-47cd68fc3649?w=150"}
+                  alt="Avatar Preview"
+                  className="w-16 h-16 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm"
+                />
+              </div>
+              <div className="space-y-1.5 flex-1">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Profile Photo</p>
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all shadow-sm">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {formData.avatar && (
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-450 font-bold text-[10px] rounded-lg transition-all cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold">PNG, JPG or GIF. Max 2MB</p>
+              </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormInput label="Full Name" name="name" placeholder="John Doe" value={formData.name} onChange={handleInputChange} required />
               <FormInput label="Roll Number" name="rollNumber" placeholder="25" value={formData.rollNumber} onChange={handleInputChange} required />
@@ -499,6 +554,40 @@ export const Students = () => {
         <form onSubmit={handleEditSubmit} className="space-y-4">
           <div className="space-y-4">
             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Student Information</h4>
+            {/* Profile Photo Upload */}
+            <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <div className="relative flex-shrink-0">
+                <img
+                  src={formData.avatar || "https://images.unsplash.com/photo-1597003890212-47cd68fc3649?w=150"}
+                  alt="Avatar Preview"
+                  className="w-16 h-16 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm"
+                />
+              </div>
+              <div className="space-y-1.5 flex-1">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Profile Photo</p>
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all shadow-sm">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {formData.avatar && (
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-450 font-bold text-[10px] rounded-lg transition-all cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold">PNG, JPG or GIF. Max 2MB</p>
+              </div>
+            </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <FormInput label="Full Name" name="name" value={formData.name} onChange={handleInputChange} required />
               <FormInput label="Roll Number" name="rollNumber" value={formData.rollNumber} onChange={handleInputChange} required />
