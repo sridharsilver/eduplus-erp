@@ -20,11 +20,13 @@ export const Fees = () => {
   const [paymentRef, setPaymentRef] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentError, setPaymentError] = useState("");
+  const [accountantName, setAccountantName] = useState("Amit Mehta");
+  const [proofReceipt, setProofReceipt] = useState("");
 
   const [paymentHistoryLogs, setPaymentHistoryLogs] = useState([
-    { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card" },
-    { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking" },
-    { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer" }
+    { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card", accountant: "Amit Mehta", proof: "" },
+    { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking", accountant: "Amit Mehta", proof: "" },
+    { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer", accountant: "Amit Mehta", proof: "" }
   ]);
 
   const { showToast, ToastComponent } = useToast();
@@ -48,8 +50,29 @@ export const Fees = () => {
     setPaymentMethod("Online Card");
     setPaymentRef("");
     setPaymentDate(new Date().toISOString().split("T")[0]);
+    setAccountantName("Amit Mehta");
+    setProofReceipt("");
     setPaymentError("");
     setIsPaymentOpen(true);
+  };
+
+  const handleProofChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 3 * 1024 * 1024) {
+        showToast("Proof receipt size must be less than 3MB!", "error");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProofReceipt(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveProof = () => {
+    setProofReceipt("");
   };
 
   const handleRecordPayment = (e) => {
@@ -91,7 +114,9 @@ export const Fees = () => {
       class: selectedStudent.class,
       amount: amount,
       date: paymentDate,
-      method: paymentMethod + (paymentRef ? ` (${paymentRef})` : "")
+      method: paymentMethod + (paymentRef ? ` (${paymentRef})` : ""),
+      accountant: accountantName,
+      proof: proofReceipt
     };
 
     setPaymentHistoryLogs([newTxn, ...paymentHistoryLogs]);
@@ -267,6 +292,38 @@ export const Fees = () => {
               </div>
             </div>
 
+            {/* Billed By & Proof Attachment section inside Receipt Modal */}
+            {(() => {
+              const studentTxn = paymentHistoryLogs.find(log => log.name === selectedStudent.name);
+              if (studentTxn) {
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl text-xs font-semibold">
+                    <div className="space-y-0.5">
+                      <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 block uppercase">Billed By:</span>
+                      <span className="text-slate-800 dark:text-slate-200 font-bold block">{studentTxn.accountant || "Amit Mehta"}</span>
+                    </div>
+                    {studentTxn.proof && (
+                      <div className="space-y-1 sm:text-right">
+                        <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 block uppercase">Receipt Proof:</span>
+                        <div className="inline-flex items-center gap-2">
+                          <img src={studentTxn.proof} alt="Proof Thumbnail" className="w-8 h-8 object-cover rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm" />
+                          <a
+                            href={studentTxn.proof}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-[10px]"
+                          >
+                            View Original
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
             {/* Footer calculations */}
             <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-800/20 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
               <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Aggregate Net Paid:</span>
@@ -369,6 +426,52 @@ export const Fees = () => {
                 onChange={(e) => setPaymentDate(e.target.value)}
                 required
               />
+
+              <FormInput
+                label="Accountant Name"
+                name="accountantName"
+                type="text"
+                value={accountantName}
+                onChange={(e) => setAccountantName(e.target.value)}
+                required
+              />
+
+              {/* Upload Proof of Receipt */}
+              <div className="md:col-span-2 space-y-2">
+                <label className="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                  Upload Proof of Receipt
+                </label>
+                <div className="flex items-center gap-4 p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                  {proofReceipt ? (
+                    <div className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-sm flex-shrink-0">
+                      <img src={proofReceipt} alt="Proof of Receipt" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={handleRemoveProof}
+                        className="absolute inset-0 bg-black/60 hover:bg-black/70 flex items-center justify-center text-white font-bold text-[9px] transition-all cursor-pointer"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800/50 flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-700 text-slate-400 dark:text-slate-500 flex-shrink-0 text-lg">
+                      📄
+                    </div>
+                  )}
+                  <div className="space-y-1">
+                    <label className="inline-block px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all shadow-sm">
+                      Select Receipt File
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handleProofChange}
+                      />
+                    </label>
+                    <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold font-sans">PNG, JPG or GIF. Max 3MB</p>
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Dynamic calculation preview */}
