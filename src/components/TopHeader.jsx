@@ -92,7 +92,7 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
                 <button
                   onClick={() => { setTheme("light"); setShowThemeDropdown(false); }}
                   className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold transition-all cursor-pointer text-left
-                    ${theme === "light" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-650 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
+                    ${theme === "light" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
                 >
                   <Sun className="w-4 h-4 text-amber-500 flex-shrink-0" />
                   Light Mode
@@ -100,7 +100,7 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
                 <button
                   onClick={() => { setTheme("dark"); setShowThemeDropdown(false); }}
                   className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold transition-all cursor-pointer text-left
-                    ${theme === "dark" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-650 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
+                    ${theme === "dark" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
                 >
                   <Moon className="w-4 h-4 text-indigo-400 flex-shrink-0" />
                   Dark Mode
@@ -108,7 +108,7 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
                 <button
                   onClick={() => { setTheme("system"); setShowThemeDropdown(false); }}
                   className={`w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold transition-all cursor-pointer text-left
-                    ${theme === "system" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-650 dark:text-slate-350 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
+                    ${theme === "system" ? "text-indigo-600 dark:text-indigo-400 bg-indigo-50/50 dark:bg-indigo-950/20" : "text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50"}`}
                 >
                   <Laptop className="w-4 h-4 text-slate-400 dark:text-slate-500 flex-shrink-0" />
                   System Default
