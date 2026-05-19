@@ -304,45 +304,71 @@ export const Fees = () => {
               </div>
             </div>
 
-            {/* Billed By & Proof Attachment section inside Receipt Modal */}
+            {/* Payment History section inside Receipt Modal */}
             {(() => {
-              const studentTxn = paymentHistoryLogs.find(log => log.name === selectedStudent.name);
-              if (studentTxn) {
+              const studentTxns = paymentHistoryLogs.filter(log => log.name === selectedStudent.name);
+              if (studentTxns.length > 0) {
                 return (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl text-xs font-semibold">
-                    <div className="space-y-0.5">
-                      <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 block uppercase">Billed By:</span>
-                      <span className="text-slate-800 dark:text-slate-200 font-bold block">{studentTxn.accountant || "Amit Mehta"}</span>
-                    </div>
-                    {studentTxn.proof && (
-                      <div className="space-y-1 sm:text-right">
-                        <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 block uppercase">Receipt Proof:</span>
-                        <div className="inline-flex items-center gap-2">
-                          <img src={studentTxn.proof} alt="Proof Thumbnail" className="w-8 h-8 object-cover rounded-lg border border-slate-200 dark:border-slate-700 shadow-sm" />
-                          <a
-                            href={studentTxn.proof}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-[10px]"
-                          >
-                            View Original
-                          </a>
-                        </div>
+                  <div className="space-y-3">
+                    <h4 className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">
+                      Payment History / Previous Transactions
+                    </h4>
+                    <div className="border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden text-xs">
+                      <div className="bg-slate-50 dark:bg-slate-800/50 px-4 py-2.5 grid grid-cols-4 font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wide border-b border-slate-100 dark:border-slate-800">
+                        <span>Date & ID</span>
+                        <span>Method</span>
+                        <span>Recorded By</span>
+                        <span className="text-right">Amount</span>
                       </div>
-                    )}
+                      <div className="divide-y divide-slate-100 dark:divide-slate-800 max-h-[160px] overflow-y-auto">
+                        {studentTxns.map((txn) => (
+                          <div key={txn.id} className="px-4 py-3 grid grid-cols-4 items-center text-slate-600 dark:text-slate-400 font-semibold">
+                            <div className="flex flex-col">
+                              <span className="text-slate-800 dark:text-slate-200 font-bold">{txn.date}</span>
+                              <span className="text-[9px] text-slate-400 dark:text-slate-500 font-bold uppercase tracking-wider">{txn.id}</span>
+                            </div>
+                            <span className="truncate">{txn.method}</span>
+                            <div className="flex flex-col">
+                              <span className="truncate">{txn.accountant || "Amit Mehta"}</span>
+                              {txn.proof && (
+                                <a
+                                  href={txn.proof}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-indigo-600 dark:text-indigo-400 hover:underline font-bold text-[9px] mt-0.5"
+                                >
+                                  View Proof
+                                </a>
+                              )}
+                            </div>
+                            <span className="text-right font-bold text-slate-850 dark:text-slate-100">${txn.amount.toLocaleString()}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 );
               }
-              return null;
+              return (
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800 rounded-2xl text-center text-xs font-semibold text-slate-400 dark:text-slate-500">
+                  No previous payments recorded for this term.
+                </div>
+              );
             })()}
 
             {/* Footer calculations */}
-            <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-800/20 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
-              <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Aggregate Net Paid:</span>
-              <span className="text-lg font-black text-slate-900 dark:text-slate-100">
-                ${selectedStudent.feeStatus === "Paid" ? selectedStudent.feeAmount : 0}
-              </span>
-            </div>
+            {(() => {
+              const studentTxns = paymentHistoryLogs.filter(log => log.name === selectedStudent.name);
+              const totalPaid = studentTxns.reduce((acc, txn) => acc + txn.amount, 0);
+              return (
+                <div className="flex justify-between items-center bg-slate-50/60 dark:bg-slate-800/20 p-4 border border-slate-100 dark:border-slate-800 rounded-2xl">
+                  <span className="text-xs font-bold text-slate-500 dark:text-slate-400">Aggregate Net Paid:</span>
+                  <span className="text-lg font-black text-slate-900 dark:text-slate-100">
+                    ${totalPaid.toLocaleString()}
+                  </span>
+                </div>
+              );
+            })()}
 
             {/* Print/Dismiss actions */}
             <div className="flex gap-3 pt-2">
