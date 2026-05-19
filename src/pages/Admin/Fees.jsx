@@ -6,7 +6,7 @@ import { Modal } from "../../components/Modal";
 import { useToast } from "../../components/Toast";
 import { FormInput, FormSelect } from "../../components/FormElements";
 import { dataAPI } from "../../data/mockData";
-import { CreditCard, Eye, Printer, Award, ArrowUpRight } from "lucide-react";
+import { CreditCard, Eye, Printer, Award, ArrowUpRight, RotateCcw } from "lucide-react";
 
 const getLoggedInUserName = () => {
   const role = localStorage.getItem("ep_role") || "admin";
@@ -144,6 +144,28 @@ export const Fees = () => {
     showToast(`Successfully recorded payment of $${amount} for ${selectedStudent.name}!`, "success");
   };
 
+  const handleVoidTransaction = (log) => {
+    if (window.confirm(`Are you sure you want to void transaction ${log.id} of $${log.amount} for ${log.name}? This will revert the student's payment and increase their due balance.`)) {
+      const studentList = dataAPI.getStudents();
+      const student = studentList.find((s) => s.name === log.name);
+      if (student) {
+        const restoredDue = student.feeAmount + log.amount;
+        dataAPI.updateStudent(student.id, {
+          feeAmount: restoredDue,
+          feeStatus: "Pending"
+        });
+        
+        dataAPI.deletePaymentLog(log.id);
+        
+        setStudents(dataAPI.getStudents());
+        setPaymentHistoryLogs(dataAPI.getPaymentLogs());
+        showToast(`Transaction ${log.id} voided. Restored $${log.amount} to ${log.name}'s balance.`, "warning");
+      } else {
+        showToast("Associated student record not found to revert balance!", "error");
+      }
+    }
+  };
+
   // Stats summaries
   const totalOutstanding = students.reduce((acc, stu) => stu.feeStatus !== "Paid" ? acc + stu.feeAmount : acc, 0);
   const totalCollected = students.reduce((acc, stu) => stu.feeStatus === "Paid" ? acc + stu.feeAmount : acc, 0);
@@ -269,9 +291,20 @@ export const Fees = () => {
                     <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{log.name}</p>
                     <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold">{log.date} • {log.method}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">+${log.amount}</p>
-                    <p className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{log.id}</p>
+                  <div className="flex items-center gap-3">
+                    <div className="text-right">
+                      <p className="text-xs font-bold text-emerald-600 dark:text-emerald-400">+${log.amount}</p>
+                      <p className="text-[8px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">{log.id}</p>
+                    </div>
+                    {role === "accounts" && (
+                      <button
+                        onClick={() => handleVoidTransaction(log)}
+                        title="Void / Revert Transaction"
+                        className="p-1 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-all cursor-pointer"
+                      >
+                        <RotateCcw className="w-3.5 h-3.5" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

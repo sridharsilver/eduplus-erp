@@ -594,5 +594,10 @@ export const dataAPI = {
     list.unshift(newLog);
     localStorage.setItem("ep_payment_logs", JSON.stringify(list));
     return newLog;
+  },
+  deletePaymentLog: (id) => {
+    let list = dataAPI.getPaymentLogs();
+    list = list.filter(log => log.id !== id);
+    localStorage.setItem("ep_payment_logs", JSON.stringify(list));
   }
 };
