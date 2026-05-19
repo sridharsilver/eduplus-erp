@@ -19,7 +19,8 @@ export const Accountants = () => {
     name: "",
     email: "",
     phone: "",
-    joiningDate: ""
+    joiningDate: "",
+    avatar: ""
   });
 
   const { showToast, ToastComponent } = useToast();
@@ -75,8 +76,28 @@ export const Accountants = () => {
       name: "",
       email: "",
       phone: "",
-      joiningDate: ""
+      joiningDate: "",
+      avatar: ""
     });
+  };
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) {
+        showToast("Image size must be less than 2MB!", "error");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({ ...prev, avatar: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemovePhoto = () => {
+    setFormData((prev) => ({ ...prev, avatar: "" }));
   };
 
   // Table Columns config
@@ -153,6 +174,42 @@ export const Accountants = () => {
         <form onSubmit={handleAddSubmit} className="space-y-5">
           <div className="space-y-4">
             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Accountant Information</h4>
+            
+            {/* Profile Photo Upload */}
+            <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <div className="relative flex-shrink-0">
+                <img
+                  src={formData.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150"}
+                  alt="Avatar Preview"
+                  className="w-16 h-16 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm"
+                />
+              </div>
+              <div className="space-y-1.5 flex-1">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Profile Photo</p>
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all shadow-sm">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {formData.avatar && (
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-450 font-bold text-[10px] rounded-lg transition-all cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold">PNG, JPG or GIF. Max 2MB</p>
+              </div>
+            </div>
+
             <FormInput label="Full Name" name="name" placeholder="E.g. Amit Mehta" value={formData.name} onChange={handleInputChange} required />
             <FormInput label="Email Address" name="email" type="email" placeholder="accounts@school.com" value={formData.email} onChange={handleInputChange} required />
             <FormInput label="Contact Phone" name="phone" placeholder="+91 99999 88888" value={formData.phone} onChange={handleInputChange} required />
@@ -178,6 +235,42 @@ export const Accountants = () => {
         <form onSubmit={handleEditSubmit} className="space-y-5">
           <div className="space-y-4">
             <h4 className="text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest border-b border-slate-100 dark:border-slate-800 pb-2">Accountant Information</h4>
+            
+            {/* Profile Photo Upload */}
+            <div className="flex items-center gap-4 p-4 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <div className="relative flex-shrink-0">
+                <img
+                  src={formData.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150"}
+                  alt="Avatar Preview"
+                  className="w-16 h-16 rounded-2xl object-cover border border-slate-200 dark:border-slate-700 shadow-sm"
+                />
+              </div>
+              <div className="space-y-1.5 flex-1">
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Profile Photo</p>
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] rounded-lg cursor-pointer transition-all shadow-sm">
+                    Upload Image
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                  {formData.avatar && (
+                    <button
+                      type="button"
+                      onClick={handleRemovePhoto}
+                      className="px-3 py-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:bg-rose-50 dark:hover:bg-rose-950/20 text-slate-500 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-450 font-bold text-[10px] rounded-lg transition-all cursor-pointer"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+                <p className="text-[9px] text-slate-400 dark:text-slate-500 font-semibold">PNG, JPG or GIF. Max 2MB</p>
+              </div>
+            </div>
+
             <FormInput label="Full Name" name="name" value={formData.name} onChange={handleInputChange} required />
             <FormInput label="Email Address" name="email" type="email" value={formData.email} onChange={handleInputChange} required />
             <FormInput label="Contact Phone" name="phone" value={formData.phone} onChange={handleInputChange} required />
