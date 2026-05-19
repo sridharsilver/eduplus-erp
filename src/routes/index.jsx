@@ -30,6 +30,9 @@ import { ParentPages } from "../pages/Parent/Pages";
 // Teacher Pages
 import { TeacherDashboard } from "../pages/Teacher/Dashboard";
 
+// Accounts Pages
+import { Dashboard as AccountsDashboard } from "../pages/Accounts/Dashboard";
+
 export const AppRoutes = () => {
   return (
     <Routes>
@@ -80,6 +83,13 @@ export const AppRoutes = () => {
         <Route path="attendance" element={<Attendance />} />
         <Route path="homework" element={<Homework />} />
         <Route path="exams" element={<Exams />} />
+      </Route>
+
+      {/* Accounts Modules Route Nesting */}
+      <Route path="/accounts" element={<AdminLayout />}>
+        <Route index element={<Navigate to="dashboard" replace />} />
+        <Route path="dashboard" element={<AccountsDashboard />} />
+        <Route path="fees" element={<Fees />} />
       </Route>
 
       {/* Catch-all redirects to Login */}

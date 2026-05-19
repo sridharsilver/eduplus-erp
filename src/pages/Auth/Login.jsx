@@ -19,6 +19,8 @@ export const Login = () => {
     // Autofill mock details for easy testing
     if (selectedRole === "admin") {
       setEmail("admin@school.com");
+    } else if (selectedRole === "accounts") {
+      setEmail("accounts@school.com");
     } else if (selectedRole === "teacher") {
       setEmail("meenakshi@school.com");
     } else if (selectedRole === "student") {
@@ -50,6 +52,8 @@ export const Login = () => {
       setTimeout(() => {
         if (role === "admin") {
           navigate("/admin/dashboard");
+        } else if (role === "accounts") {
+          navigate("/accounts/dashboard");
         } else if (role === "teacher") {
           navigate("/teacher/dashboard");
         } else if (role === "student") {
@@ -75,13 +79,13 @@ export const Login = () => {
           <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">
             Select Your Role
           </label>
-          <div className="grid grid-cols-4 gap-2">
-            {["admin", "teacher", "student", "parent"].map((r) => (
+          <div className="grid grid-cols-5 gap-1.5">
+            {["admin", "accounts", "teacher", "student", "parent"].map((r) => (
               <button
                 key={r}
                 type="button"
                 onClick={() => handleRoleChange(r)}
-                className={`py-2 px-1 text-xs font-bold rounded-xl border text-center transition-all cursor-pointer capitalize
+                className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl border text-center transition-all cursor-pointer capitalize
                   ${role === r 
                     ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/10" 
                     : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/50 dark:bg-slate-800 dark:border-slate-700/60 dark:text-slate-400 dark:hover:bg-slate-800/80"}`}

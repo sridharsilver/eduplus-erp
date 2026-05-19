@@ -40,6 +40,10 @@ export const Sidebar = ({ role = "admin", isCollapsed = false, onToggle }) => {
       { path: "/teacher/attendance", label: "Mark Attendance", icon: "CalendarCheck" },
       { path: "/teacher/homework", label: "Add Homework", icon: "BookOpen" },
       { path: "/teacher/exams", label: "Enter Marks", icon: "FileSpreadsheet" }
+    ],
+    accounts: [
+      { path: "/accounts/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+      { path: "/accounts/fees", label: "Fees Management", icon: "CreditCard" }
     ]
   };
 

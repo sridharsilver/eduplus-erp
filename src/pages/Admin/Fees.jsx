@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { PageTitle } from "../../components/PageTitle";
 import { DataTable } from "../../components/DataTable";
 import { Modal } from "../../components/Modal";
@@ -124,9 +125,17 @@ export const Fees = () => {
     }
   ];
 
+  const location = useLocation();
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const routePrefix = pathSegments[0] || "admin";
+  const capitalizedPrefix = routePrefix.charAt(0).toUpperCase() + routePrefix.slice(1);
+
+  const activeRole = localStorage.getItem("ep_role") || "admin";
   const actions = [
     { label: "View Receipt", icon: Eye, onClick: handleOpenReceipt },
-    { label: "Record Payment", icon: CreditCard, onClick: handleOpenPayment }
+    ...(activeRole === "accounts" 
+      ? [{ label: "Record Payment", icon: CreditCard, onClick: handleOpenPayment }] 
+      : [])
   ];
 
   return (
@@ -134,7 +143,7 @@ export const Fees = () => {
       {ToastComponent}
       <PageTitle
         title="Fees Management Ledger"
-        breadcrumbs={[{ label: "Admin" }, { label: "Fees" }]}
+        breadcrumbs={[{ label: capitalizedPrefix }, { label: "Fees" }]}
       />
 
       {/* Aggregate metric cards */}

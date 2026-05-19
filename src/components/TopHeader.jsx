@@ -29,6 +29,7 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
       case "admin": return "bg-indigo-50 border-indigo-100 text-indigo-700 dark:bg-indigo-950/40 dark:border-indigo-900/60 dark:text-indigo-300";
       case "student": return "bg-emerald-50 border-emerald-100 text-emerald-700 dark:bg-emerald-950/40 dark:border-emerald-900/60 dark:text-emerald-300";
       case "parent": return "bg-amber-50 border-amber-100 text-amber-700 dark:bg-amber-950/40 dark:border-amber-900/60 dark:text-amber-300";
+      case "accounts": return "bg-rose-50 border-rose-100 text-rose-700 dark:bg-rose-950/40 dark:border-rose-900/60 dark:text-rose-300";
       default: return "bg-slate-50 border-slate-100 text-slate-700 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-300";
     }
   };
@@ -161,6 +162,8 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
                 ? "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" 
                 : role === "teacher" 
                 ? "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150"
+                : role === "accounts"
+                ? "https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?w=150"
                 : "https://images.unsplash.com/photo-1597003890212-47cd68fc3649?w=150"
             }
             alt="Profile Avatar"
@@ -168,10 +171,10 @@ export const TopHeader = ({ role = "admin", onOpenMobileDrawer, onToggleDesktopS
           />
           <div className="hidden xl:block text-left">
             <p className="text-xs font-bold text-slate-800 dark:text-slate-200 leading-none">
-              {role === "admin" ? "Sridhar Silver" : role === "student" ? "Aarav Sharma" : "Rajesh Sharma"}
+              {role === "admin" ? "Sridhar Silver" : role === "accounts" ? "Amit Mehta" : role === "student" ? "Aarav Sharma" : "Rajesh Sharma"}
             </p>
             <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-500 mt-0.5 leading-none">
-              {role === "admin" ? "School Director" : role === "student" ? "Roll #12 (10-A)" : "Guardian"}
+              {role === "admin" ? "School Director" : role === "accounts" ? "Chief Accountant" : role === "student" ? "Roll #12 (10-A)" : "Guardian"}
             </p>
           </div>
 

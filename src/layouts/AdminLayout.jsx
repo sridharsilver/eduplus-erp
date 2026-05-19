@@ -26,7 +26,7 @@ export const AdminLayout = () => {
 
   const pathSegments = location.pathname.split("/").filter(Boolean);
   const routePrefix = pathSegments[0];
-  const validRoles = ["admin", "student", "parent", "teacher"];
+  const validRoles = ["admin", "student", "parent", "teacher", "accounts"];
 
   if (validRoles.includes(routePrefix) && routePrefix !== savedRole) {
     return <Navigate to={`/${savedRole}/dashboard`} replace />;
@@ -50,6 +50,10 @@ export const AdminLayout = () => {
       { path: "/admin/notices", label: "Notice Board", icon: "Megaphone" },
       { path: "/admin/timetable", label: "Timetable", icon: "Clock" },
       { path: "/admin/exams", label: "Exams & Results", icon: "FileSpreadsheet" }
+    ],
+    accounts: [
+      { path: "/accounts/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
+      { path: "/accounts/fees", label: "Fees Management", icon: "CreditCard" }
     ],
     student: [
       { path: "/student/dashboard", label: "Dashboard", icon: "LayoutDashboard" },

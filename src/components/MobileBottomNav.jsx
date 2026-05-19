@@ -28,6 +28,10 @@ export const MobileBottomNav = ({ role = "admin", onOpenMoreDrawer }) => {
       { path: "/teacher/attendance", label: "Attendance", icon: "CalendarCheck" },
       { path: "/teacher/homework", label: "Homework", icon: "BookOpen" },
       { path: "/teacher/exams", label: "Grading", icon: "FileSpreadsheet" }
+    ],
+    accounts: [
+      { path: "/accounts/dashboard", label: "Home", icon: "LayoutDashboard" },
+      { path: "/accounts/fees", label: "Fees", icon: "CreditCard" }
     ]
   };
 
