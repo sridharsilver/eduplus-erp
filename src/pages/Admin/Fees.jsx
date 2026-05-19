@@ -25,6 +25,8 @@ export const Fees = () => {
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  const [selectedClass, setSelectedClass] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
   
   // Payment Form States
   const [paymentAmount, setPaymentAmount] = useState("");
@@ -46,6 +48,18 @@ export const Fees = () => {
   useEffect(() => {
     setStudents(dataAPI.getStudents());
   }, []);
+
+  const classesList = useMemo(() => {
+    return [...new Set(students.map((s) => s.class))].sort();
+  }, [students]);
+
+  const filteredStudents = useMemo(() => {
+    return students.filter((stu) => {
+      const matchesClass = selectedClass === "All" || stu.class === selectedClass;
+      const matchesStatus = selectedStatus === "All" || stu.feeStatus === selectedStatus;
+      return matchesClass && matchesStatus;
+    });
+  }, [students, selectedClass, selectedStatus]);
 
   const handleOpenReceipt = (student) => {
     setSelectedStudent(student);
@@ -215,11 +229,38 @@ export const Fees = () => {
           <h4 className="text-base font-bold text-slate-800 dark:text-slate-200 mb-4">Student Statements</h4>
           <DataTable
             columns={columns}
-            data={students}
+            data={filteredStudents}
             rowActions={actions}
             searchPlaceholder="Search student fees..."
             searchKey="name"
             pageSize={5}
+            extraFilters={
+              <>
+                {/* Class Filter */}
+                <select
+                  value={selectedClass}
+                  onChange={(e) => setSelectedClass(e.target.value)}
+                  className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 text-xs font-bold text-slate-600 dark:text-slate-300 focus:outline-none focus:border-indigo-500 transition-all cursor-pointer appearance-none pr-8 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%209l3%203%203-3%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat"
+                >
+                  <option value="All">All Classes</option>
+                  {classesList.map((cls) => (
+                    <option key={cls} value={cls}>{cls}</option>
+                  ))}
+                </select>
+
+                {/* Status Filter */}
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-850 text-xs font-bold text-slate-600 dark:text-slate-300 focus:outline-none focus:border-indigo-500 transition-all cursor-pointer appearance-none pr-8 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2020%2020%22%20fill%3D%22none%22%3E%3Cpath%20d%3D%22M7%209l3%203%203-3%22%20stroke%3D%22%236b7280%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1rem] bg-[right_0.75rem_center] bg-no-repeat"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="Paid">Paid</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Overdue">Overdue</option>
+                </select>
+              </>
+            }
           />
         </div>
 

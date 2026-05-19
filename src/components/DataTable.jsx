@@ -8,7 +8,8 @@ export const DataTable = ({
   onRowSelect,
   searchPlaceholder = "Search records...",
   searchKey = "name",
-  pageSize = 5
+  pageSize = 5,
+  extraFilters = null
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
@@ -98,7 +99,7 @@ export const DataTable = ({
   return (
     <div className="w-full flex flex-col">
       {/* Top Search bar */}
-      <div className="mb-4 flex flex-col md:flex-row md:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm transition-colors duration-300">
+      <div className="mb-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-white dark:bg-slate-900 p-3 border border-slate-100 dark:border-slate-800/80 rounded-2xl shadow-sm transition-colors duration-300">
         <div className="relative flex-1">
           <input
             type="text"
@@ -111,7 +112,12 @@ export const DataTable = ({
             className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl py-2.5 pl-4 pr-10 text-xs font-semibold placeholder-slate-400 dark:placeholder-slate-500 text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500/10 focus:border-indigo-600 focus:bg-white dark:focus:bg-slate-900 transition-all"
           />
         </div>
-        <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2">
+        {extraFilters && (
+          <div className="flex flex-wrap items-center gap-2">
+            {extraFilters}
+          </div>
+        )}
+        <div className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider px-2 whitespace-nowrap">
           Total: {filteredData.length} records
         </div>
       </div>
