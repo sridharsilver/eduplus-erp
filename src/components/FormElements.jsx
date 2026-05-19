@@ -35,7 +35,8 @@ export const FormInput = ({
           required={required}
           className={`block w-full rounded-xl border py-3 text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 transition-all focus:outline-none focus:ring-2 focus:ring-indigo-500/20 text-sm md:text-base
             ${Icon ? "pl-10" : "pl-4"} pr-4
-            ${error ? "border-rose-400 bg-rose-50/20 dark:bg-rose-950/10 focus:border-rose-500" : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:border-indigo-600 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900"}`}
+            ${error ? "border-rose-400 bg-rose-50/20 dark:bg-rose-950/10 focus:border-rose-500" : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus:border-indigo-600 dark:focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900"}
+            disabled:bg-slate-50/60 dark:disabled:bg-slate-900/40 disabled:text-slate-400 dark:disabled:text-slate-500 disabled:border-slate-100 dark:disabled:border-slate-800/80 disabled:cursor-not-allowed`}
           {...props}
         />
       </div>

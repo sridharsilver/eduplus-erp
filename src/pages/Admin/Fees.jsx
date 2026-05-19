@@ -388,6 +388,15 @@ export const Fees = () => {
               </div>
             </div>
 
+            {/* Active Session Accountant Info Banner */}
+            <div className="flex items-center justify-between px-4 py-2.5 bg-slate-50/50 dark:bg-slate-800/20 border border-slate-100 dark:border-slate-800/60 rounded-xl text-xs font-semibold">
+              <span className="text-[9px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest">Active Accountant:</span>
+              <span className="font-bold text-slate-700 dark:text-slate-350 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                {accountantName} (Chief Accountant)
+              </span>
+            </div>
+
             {/* Inputs grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormInput
@@ -436,15 +445,6 @@ export const Fees = () => {
                 type="date"
                 value={paymentDate}
                 onChange={(e) => setPaymentDate(e.target.value)}
-                required
-              />
-
-              <FormInput
-                label="Accountant Name (Registered User)"
-                name="accountantName"
-                type="text"
-                value={accountantName}
-                disabled
                 required
               />
 
