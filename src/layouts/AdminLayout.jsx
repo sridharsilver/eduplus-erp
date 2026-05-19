@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Outlet, useNavigate, useLocation, NavLink } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Outlet, useNavigate, useLocation, NavLink, Navigate } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
 import { TopHeader } from "../components/TopHeader";
 import { MobileBottomNav } from "../components/MobileBottomNav";
@@ -9,24 +9,30 @@ import * as Icons from "lucide-react";
 export const AdminLayout = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
-  const [role, setRole] = useState("admin");
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Validate logged in status on mount
-  useEffect(() => {
-    const savedRole = localStorage.getItem("ep_role");
-    if (!savedRole) {
-      navigate("/");
-    } else {
-      setRole(savedRole);
-    }
-  }, [navigate]);
+  const savedRole = localStorage.getItem("ep_role");
 
   // Close mobile drawer on route changes
   useEffect(() => {
     setIsMobileDrawerOpen(false);
   }, [location.pathname]);
+
+  // Synchronous checks to avoid flashing unauthorized content
+  if (!savedRole) {
+    return <Navigate to="/" replace />;
+  }
+
+  const pathSegments = location.pathname.split("/").filter(Boolean);
+  const routePrefix = pathSegments[0];
+  const validRoles = ["admin", "student", "parent", "teacher"];
+
+  if (validRoles.includes(routePrefix) && routePrefix !== savedRole) {
+    return <Navigate to={`/${savedRole}/dashboard`} replace />;
+  }
+
+  const role = savedRole;
 
   const toggleSidebar = () => {
     setIsSidebarCollapsed(!isSidebarCollapsed);

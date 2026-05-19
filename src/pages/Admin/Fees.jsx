@@ -3,6 +3,7 @@ import { PageTitle } from "../../components/PageTitle";
 import { DataTable } from "../../components/DataTable";
 import { Modal } from "../../components/Modal";
 import { useToast } from "../../components/Toast";
+import { FormInput, FormSelect } from "../../components/FormElements";
 import { dataAPI } from "../../data/mockData";
 import { CreditCard, Eye, Printer, Award, ArrowUpRight } from "lucide-react";
 
@@ -10,6 +11,21 @@ export const Fees = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
+  const [isPaymentOpen, setIsPaymentOpen] = useState(false);
+  
+  // Payment Form States
+  const [paymentAmount, setPaymentAmount] = useState("");
+  const [paymentMethod, setPaymentMethod] = useState("Online Card");
+  const [paymentRef, setPaymentRef] = useState("");
+  const [paymentDate, setPaymentDate] = useState("");
+  const [paymentError, setPaymentError] = useState("");
+
+  const [paymentHistoryLogs, setPaymentHistoryLogs] = useState([
+    { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card" },
+    { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking" },
+    { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer" }
+  ]);
+
   const { showToast, ToastComponent } = useToast();
 
   useEffect(() => {
@@ -21,16 +37,65 @@ export const Fees = () => {
     setIsReceiptOpen(true);
   };
 
-  const handleSimulatePayment = (student) => {
+  const handleOpenPayment = (student) => {
     if (student.feeStatus === "Paid") {
       showToast("Fee is already completely paid!", "info");
       return;
     }
-    
-    // Simulate updating paid status
-    dataAPI.updateStudent(student.id, { feeStatus: "Paid", attendanceRate: student.attendanceRate });
+    setSelectedStudent(student);
+    setPaymentAmount(student.feeAmount);
+    setPaymentMethod("Online Card");
+    setPaymentRef("");
+    setPaymentDate(new Date().toISOString().split("T")[0]);
+    setPaymentError("");
+    setIsPaymentOpen(true);
+  };
+
+  const handleRecordPayment = (e) => {
+    e.preventDefault();
+    if (!selectedStudent) return;
+
+    const amount = Number(paymentAmount);
+    if (isNaN(amount) || amount <= 0) {
+      setPaymentError("Please enter a valid positive payment amount.");
+      return;
+    }
+
+    if (amount > selectedStudent.feeAmount) {
+      setPaymentError(`Payment amount cannot exceed the outstanding balance of $${selectedStudent.feeAmount}.`);
+      return;
+    }
+
+    setPaymentError("");
+
+    const remainingDue = selectedStudent.feeAmount - amount;
+    const newStatus = remainingDue === 0 ? "Paid" : (selectedStudent.feeStatus === "Overdue" ? "Overdue" : "Pending");
+
+    // Update database
+    dataAPI.updateStudent(selectedStudent.id, {
+      feeAmount: remainingDue,
+      feeStatus: newStatus,
+      attendanceRate: selectedStudent.attendanceRate
+    });
+
+    // Update local state list
     setStudents(dataAPI.getStudents());
-    showToast(`Simulation complete: Received $${student.feeAmount} payment from ${student.name}!`, "success");
+
+    // Generate new Transaction
+    const nextTxnNum = 401 + paymentHistoryLogs.length;
+    const txnId = `TXN10${nextTxnNum}`;
+    const newTxn = {
+      id: txnId,
+      name: selectedStudent.name,
+      class: selectedStudent.class,
+      amount: amount,
+      date: paymentDate,
+      method: paymentMethod + (paymentRef ? ` (${paymentRef})` : "")
+    };
+
+    setPaymentHistoryLogs([newTxn, ...paymentHistoryLogs]);
+    setIsPaymentOpen(false);
+    showToast(`Successfully recorded payment of $${amount} for ${selectedStudent.name}!`, "success");
   };
 
   // Stats summaries
@@ -61,14 +126,7 @@ export const Fees = () => {
 
   const actions = [
     { label: "View Receipt", icon: Eye, onClick: handleOpenReceipt },
-    { label: "Record Payment", icon: CreditCard, onClick: handleSimulatePayment }
-  ];
-
-  // Transaction history logs
-  const paymentHistoryLogs = [
-    { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card" },
-    { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking" },
-    { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer" }
+    { label: "Record Payment", icon: CreditCard, onClick: handleOpenPayment }
   ];
 
   return (
@@ -225,6 +283,127 @@ export const Fees = () => {
               </button>
             </div>
           </div>
+        )}
+      </Modal>
+
+      {/* Record Payment Modal */}
+      <Modal
+        isOpen={isPaymentOpen}
+        onClose={() => setIsPaymentOpen(false)}
+        title="Record Student Fee Payment"
+        size="md"
+      >
+        {selectedStudent && (
+          <form onSubmit={handleRecordPayment} className="space-y-5">
+            {/* Student details panel */}
+            <div className="flex items-center gap-3 p-3 bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 rounded-2xl">
+              <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold text-lg">
+                🎓
+              </div>
+              <div>
+                <p className="text-xs font-bold text-slate-800 dark:text-slate-200">{selectedStudent.name}</p>
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 font-semibold">{selectedStudent.class} • Roll #{selectedStudent.rollNumber}</p>
+              </div>
+              <div className="ml-auto text-right">
+                <p className="text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">Total Outstanding</p>
+                <p className="text-sm font-extrabold text-slate-800 dark:text-slate-100">${selectedStudent.feeAmount}</p>
+              </div>
+            </div>
+
+            {/* Inputs grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormInput
+                label="Amount to Pay ($)"
+                name="paymentAmount"
+                type="number"
+                min="0.01"
+                step="0.01"
+                max={selectedStudent.feeAmount}
+                placeholder="0.00"
+                value={paymentAmount}
+                onChange={(e) => {
+                  setPaymentAmount(e.target.value);
+                  setPaymentError("");
+                }}
+                required
+              />
+
+              <FormSelect
+                label="Payment Method"
+                name="paymentMethod"
+                value={paymentMethod}
+                onChange={(e) => setPaymentMethod(e.target.value)}
+                options={[
+                  { label: "Online Card", value: "Online Card" },
+                  { label: "Net Banking", value: "Net Banking" },
+                  { label: "UPI Transfer", value: "UPI Transfer" },
+                  { label: "Cash", value: "Cash" }
+                ]}
+                placeholder=""
+                required
+              />
+
+              <FormInput
+                label="Reference / Receipt #"
+                name="paymentRef"
+                type="text"
+                placeholder="e.g. TXN-98402, CHQ-1049"
+                value={paymentRef}
+                onChange={(e) => setPaymentRef(e.target.value)}
+              />
+
+              <FormInput
+                label="Payment Date"
+                name="paymentDate"
+                type="date"
+                value={paymentDate}
+                onChange={(e) => setPaymentDate(e.target.value)}
+                required
+              />
+            </div>
+
+            {/* Dynamic calculation preview */}
+            {paymentAmount && !isNaN(Number(paymentAmount)) && Number(paymentAmount) > 0 && (
+              <div className="p-3.5 bg-indigo-50/40 dark:bg-indigo-950/10 border border-indigo-100/40 dark:border-indigo-900/30 rounded-2xl space-y-1.5 text-xs font-semibold transition-all">
+                <div className="flex justify-between text-slate-500 dark:text-slate-400">
+                  <span>Invoiced Balance:</span>
+                  <span className="font-bold">${selectedStudent.feeAmount}</span>
+                </div>
+                <div className="flex justify-between text-indigo-700 dark:text-indigo-400">
+                  <span>Paying:</span>
+                  <span className="font-bold">-${Number(paymentAmount).toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between text-slate-800 dark:text-slate-200 border-t border-indigo-100/50 dark:border-indigo-900/30 pt-1.5 font-bold">
+                  <span>Outstanding After Payment:</span>
+                  <span className="font-extrabold text-sm text-indigo-600 dark:text-indigo-400">
+                    ${(selectedStudent.feeAmount - Number(paymentAmount)).toFixed(2)}
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {paymentError && (
+              <p className="text-xs font-semibold text-rose-500 text-center animate-shake">{paymentError}</p>
+            )}
+
+            {/* Action buttons */}
+            <div className="flex gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsPaymentOpen(false)}
+                className="flex-1 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 font-bold text-xs rounded-xl cursor-pointer transition-all"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 flex items-center justify-center gap-1.5 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl cursor-pointer shadow-md shadow-indigo-500/10 transition-all"
+              >
+                <CreditCard className="w-3.5 h-3.5" />
+                Record Payment
+              </button>
+            </div>
+          </form>
         )}
       </Modal>
     </div>
