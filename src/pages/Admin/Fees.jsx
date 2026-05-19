@@ -8,6 +8,18 @@ import { FormInput, FormSelect } from "../../components/FormElements";
 import { dataAPI } from "../../data/mockData";
 import { CreditCard, Eye, Printer, Award, ArrowUpRight } from "lucide-react";
 
+const getLoggedInUserName = () => {
+  const role = localStorage.getItem("ep_role") || "admin";
+  switch (role) {
+    case "admin": return "Sridhar Silver";
+    case "accounts": return "Amit Mehta";
+    case "teacher": return "Mrs. Meenakshi Sen";
+    case "student": return "Aarav Sharma";
+    case "parent": return "Rajesh Sharma";
+    default: return "Staff Member";
+  }
+};
+
 export const Fees = () => {
   const [students, setStudents] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null);
@@ -20,7 +32,7 @@ export const Fees = () => {
   const [paymentRef, setPaymentRef] = useState("");
   const [paymentDate, setPaymentDate] = useState("");
   const [paymentError, setPaymentError] = useState("");
-  const [accountantName, setAccountantName] = useState("Amit Mehta");
+  const [accountantName, setAccountantName] = useState(() => getLoggedInUserName());
   const [proofReceipt, setProofReceipt] = useState("");
 
   const [paymentHistoryLogs, setPaymentHistoryLogs] = useState([
@@ -50,7 +62,7 @@ export const Fees = () => {
     setPaymentMethod("Online Card");
     setPaymentRef("");
     setPaymentDate(new Date().toISOString().split("T")[0]);
-    setAccountantName("Amit Mehta");
+    setAccountantName(getLoggedInUserName());
     setProofReceipt("");
     setPaymentError("");
     setIsPaymentOpen(true);
@@ -428,11 +440,11 @@ export const Fees = () => {
               />
 
               <FormInput
-                label="Accountant Name"
+                label="Accountant Name (Registered User)"
                 name="accountantName"
                 type="text"
                 value={accountantName}
-                onChange={(e) => setAccountantName(e.target.value)}
+                disabled
                 required
               />
 
