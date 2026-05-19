@@ -12,6 +12,7 @@ export const Sidebar = ({ role = "admin", isCollapsed = false, onToggle }) => {
       { path: "/admin/dashboard", label: "Dashboard", icon: "LayoutDashboard" },
       { path: "/admin/students", label: "Students", icon: "Users" },
       { path: "/admin/teachers", label: "Teachers", icon: "GraduationCap" },
+      { path: "/admin/accountants", label: "Accountants", icon: "Briefcase" },
       { path: "/admin/attendance", label: "Attendance", icon: "CalendarCheck" },
       { path: "/admin/fees", label: "Fees Management", icon: "CreditCard" },
       { path: "/admin/homework", label: "Homework", icon: "BookOpen" },

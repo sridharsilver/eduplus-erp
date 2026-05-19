@@ -334,6 +334,18 @@ const defaultResults = {
   ]
 };
 
+const defaultAccountants = [
+  {
+    id: "ACC001",
+    name: "Amit Mehta",
+    avatar: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150",
+    email: "accounts@school.com",
+    phone: "+91 99999 88888",
+    joiningDate: "2024-01-15",
+    status: "Active"
+  }
+];
+
 // Local storage init utility
 const defaultClasses = ["Grade 10-A", "Grade 10-B", "Grade 9-A"];
 
@@ -361,6 +373,9 @@ const initStorage = () => {
   }
   if (!localStorage.getItem("ep_timetable")) {
     localStorage.setItem("ep_timetable", JSON.stringify(defaultTimetable));
+  }
+  if (!localStorage.getItem("ep_accountants")) {
+    localStorage.setItem("ep_accountants", JSON.stringify(defaultAccountants));
   }
 };
 
@@ -524,5 +539,37 @@ export const dataAPI = {
       results[studentId].push(resultObject);
     }
     localStorage.setItem("ep_results", JSON.stringify(results));
+  },
+
+  // ACCOUNTANTS CRUD
+  getAccountants: () => JSON.parse(localStorage.getItem("ep_accountants")) || defaultAccountants,
+  getAccountantById: (id) => dataAPI.getAccountants().find(a => a.id === id),
+  addAccountant: (accountant) => {
+    const list = dataAPI.getAccountants();
+    const newAccountant = {
+      ...accountant,
+      id: accountant.id || `ACC${String(list.length + 1).padStart(3, "0")}`,
+      avatar: accountant.avatar || "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150",
+      joiningDate: accountant.joiningDate || new Date().toISOString().split("T")[0],
+      status: "Active"
+    };
+    list.unshift(newAccountant);
+    localStorage.setItem("ep_accountants", JSON.stringify(list));
+    return newAccountant;
+  },
+  updateAccountant: (id, updatedFields) => {
+    const list = dataAPI.getAccountants();
+    const index = list.findIndex(a => a.id === id);
+    if (index > -1) {
+      list[index] = { ...list[index], ...updatedFields };
+      localStorage.setItem("ep_accountants", JSON.stringify(list));
+      return list[index];
+    }
+    return null;
+  },
+  deleteAccountant: (id) => {
+    let list = dataAPI.getAccountants();
+    list = list.filter(a => a.id !== id);
+    localStorage.setItem("ep_accountants", JSON.stringify(list));
   }
 };

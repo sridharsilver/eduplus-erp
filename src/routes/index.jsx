@@ -18,6 +18,7 @@ import { Homework } from "../pages/Admin/Homework";
 import { Notices } from "../pages/Admin/Notices";
 import { Timetable } from "../pages/Admin/Timetable";
 import { Exams } from "../pages/Admin/Exams";
+import { Accountants } from "../pages/Admin/Accountants";
 
 // Student Pages
 import { StudentDashboard } from "../pages/Student/Dashboard";
@@ -52,6 +53,7 @@ export const AppRoutes = () => {
         <Route path="notices" element={<Notices />} />
         <Route path="timetable" element={<Timetable />} />
         <Route path="exams" element={<Exams />} />
+        <Route path="accountants" element={<Accountants />} />
       </Route>
 
       {/* Student Modules Route Nesting */}
