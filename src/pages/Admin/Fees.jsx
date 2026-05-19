@@ -37,16 +37,13 @@ export const Fees = () => {
   const [accountantName, setAccountantName] = useState(() => getLoggedInUserName());
   const [proofReceipt, setProofReceipt] = useState("");
 
-  const [paymentHistoryLogs, setPaymentHistoryLogs] = useState([
-    { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card", accountant: "Amit Mehta", proof: "" },
-    { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking", accountant: "Amit Mehta", proof: "" },
-    { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer", accountant: "Amit Mehta", proof: "" }
-  ]);
+  const [paymentHistoryLogs, setPaymentHistoryLogs] = useState([]);
 
   const { showToast, ToastComponent } = useToast();
 
   useEffect(() => {
     setStudents(dataAPI.getStudents());
+    setPaymentHistoryLogs(dataAPI.getPaymentLogs());
   }, []);
 
   const classesList = useMemo(() => {
@@ -132,10 +129,7 @@ export const Fees = () => {
     setStudents(dataAPI.getStudents());
 
     // Generate new Transaction
-    const nextTxnNum = 401 + paymentHistoryLogs.length;
-    const txnId = `TXN10${nextTxnNum}`;
-    const newTxn = {
-      id: txnId,
+    const newTxn = dataAPI.addPaymentLog({
       name: selectedStudent.name,
       class: selectedStudent.class,
       amount: amount,
@@ -143,9 +137,9 @@ export const Fees = () => {
       method: paymentMethod + (paymentRef ? ` (${paymentRef})` : ""),
       accountant: accountantName,
       proof: proofReceipt
-    };
+    });
 
-    setPaymentHistoryLogs([newTxn, ...paymentHistoryLogs]);
+    setPaymentHistoryLogs(dataAPI.getPaymentLogs());
     setIsPaymentOpen(false);
     showToast(`Successfully recorded payment of $${amount} for ${selectedStudent.name}!`, "success");
   };

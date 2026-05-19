@@ -346,6 +346,12 @@ const defaultAccountants = [
   }
 ];
 
+const defaultPaymentHistoryLogs = [
+  { id: "TXN10401", name: "Aarav Sharma", class: "Grade 10-A", amount: 2500, date: "2026-05-12", method: "Online Card", accountant: "Amit Mehta", proof: "" },
+  { id: "TXN10402", name: "Diya Roy", class: "Grade 9-A", amount: 2200, date: "2026-05-15", method: "Net Banking", accountant: "Amit Mehta", proof: "" },
+  { id: "TXN10403", name: "Reyansh Patel", class: "Grade 9-A", amount: 2200, date: "2026-05-18", method: "UPI Transfer", accountant: "Amit Mehta", proof: "" }
+];
+
 // Local storage init utility
 const defaultClasses = ["Grade 10-A", "Grade 10-B", "Grade 9-A"];
 
@@ -376,6 +382,9 @@ const initStorage = () => {
   }
   if (!localStorage.getItem("ep_accountants")) {
     localStorage.setItem("ep_accountants", JSON.stringify(defaultAccountants));
+  }
+  if (!localStorage.getItem("ep_payment_logs")) {
+    localStorage.setItem("ep_payment_logs", JSON.stringify(defaultPaymentHistoryLogs));
   }
 };
 
@@ -571,5 +580,19 @@ export const dataAPI = {
     let list = dataAPI.getAccountants();
     list = list.filter(a => a.id !== id);
     localStorage.setItem("ep_accountants", JSON.stringify(list));
+  },
+
+  // PAYMENT LOGS CRUD
+  getPaymentLogs: () => JSON.parse(localStorage.getItem("ep_payment_logs")) || defaultPaymentHistoryLogs,
+  addPaymentLog: (log) => {
+    const list = dataAPI.getPaymentLogs();
+    const nextNum = 10401 + list.length;
+    const newLog = {
+      id: `TXN${nextNum}`,
+      ...log
+    };
+    list.unshift(newLog);
+    localStorage.setItem("ep_payment_logs", JSON.stringify(list));
+    return newLog;
   }
 };

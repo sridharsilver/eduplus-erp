@@ -13,6 +13,7 @@ export const Dashboard = () => {
   const students = dataAPI.getStudents();
   const teachers = dataAPI.getTeachers();
   const notices = dataAPI.getNotices();
+  const paymentLogs = dataAPI.getPaymentLogs();
 
   const totalStudents = students.length;
   const totalTeachers = teachers.length;
@@ -38,10 +39,15 @@ export const Dashboard = () => {
 
   // Activities list
   const recentActivities = [
-    { id: 1, text: "Parent Rajesh Sharma paid Grade 10 fees", time: "10 mins ago", type: "fee" },
-    { id: 2, text: "Mrs. Meenakshi posted Mathematics Homework", time: "1 hour ago", type: "homework" },
-    { id: 3, text: "Grade 10-A daily attendance recorded successfully", time: "3 hours ago", type: "attendance" },
-    { id: 4, text: "Principal posted Annual Sports notice", time: "Yesterday", type: "notice" }
+    ...paymentLogs.slice(0, 3).map((log) => ({
+      id: log.id,
+      text: `${log.accountant || "Accountant"} logged fee payment of $${log.amount} for ${log.name} (${log.class})`,
+      time: log.date,
+      type: "fee"
+    })),
+    { id: "act-2", text: "Mrs. Meenakshi posted Mathematics Homework", time: "1 hour ago", type: "homework" },
+    { id: "act-3", text: "Grade 10-A daily attendance recorded successfully", time: "3 hours ago", type: "attendance" },
+    { id: "act-4", text: "Principal posted Annual Sports notice", time: "Yesterday", type: "notice" }
   ];
 
   return (
