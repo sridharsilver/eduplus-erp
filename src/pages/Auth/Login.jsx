@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthLayout } from "../../layouts/AuthLayout";
 import { FormInput, FormSelect } from "../../components/FormElements";
-import { Mail, Lock, LogIn, ArrowRight } from "lucide-react";
+import { Mail, Lock, LogIn, ArrowRight, Shield, CreditCard, GraduationCap, UserCheck, Users } from "lucide-react";
 import { useToast } from "../../components/Toast";
 
 export const Login = () => {
@@ -75,25 +75,47 @@ export const Login = () => {
 
       <form onSubmit={handleLogin} className="space-y-4">
         {/* Role Picker Selection */}
-        <div>
-          <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">
+        <div className="space-y-2">
+          <label className="block text-xs font-bold text-slate-400 dark:text-slate-500 uppercase tracking-widest text-center">
             Select Your Role
           </label>
-          <div className="grid grid-cols-5 gap-1.5">
-            {["admin", "accounts", "teacher", "student", "parent"].map((r) => (
-              <button
-                key={r}
-                type="button"
-                onClick={() => handleRoleChange(r)}
-                className={`py-2 px-1 text-[10px] sm:text-xs font-bold rounded-xl border text-center transition-all cursor-pointer capitalize
-                  ${role === r 
-                    ? "bg-indigo-600 border-indigo-600 text-white shadow-md shadow-indigo-500/10" 
-                    : "bg-slate-50 border-slate-200 text-slate-500 hover:bg-slate-100/50 dark:bg-slate-800 dark:border-slate-700/60 dark:text-slate-400 dark:hover:bg-slate-800/80"}`}
-              >
-                {r}
-              </button>
-            ))}
+          <div className="grid grid-cols-5 gap-2">
+            {[
+              { id: "admin", label: "Admin", icon: Shield },
+              { id: "accounts", label: "Accounts", icon: CreditCard },
+              { id: "teacher", label: "Teacher", icon: GraduationCap },
+              { id: "student", label: "Student", icon: UserCheck },
+              { id: "parent", label: "Parent", icon: Users }
+            ].map((item) => {
+              const IconComponent = item.icon;
+              const isActive = role === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleRoleChange(item.id)}
+                  className={`flex flex-col items-center justify-center p-2.5 rounded-2xl border transition-all duration-300 cursor-pointer
+                    ${isActive 
+                      ? "bg-indigo-50 border-indigo-250 text-indigo-600 dark:bg-indigo-950/40 dark:border-indigo-800/80 dark:text-indigo-400 shadow-sm" 
+                      : "bg-slate-50/50 border-slate-100 text-slate-500 hover:bg-slate-100/50 dark:bg-slate-900/50 dark:border-slate-800/80 dark:text-slate-400 dark:hover:bg-slate-850"}`}
+                >
+                  <div className={`p-2 rounded-xl transition-all duration-300 mb-1.5
+                    ${isActive 
+                      ? "bg-indigo-600 text-white shadow-md shadow-indigo-500/25 rotate-6 scale-110" 
+                      : "bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400"}`}>
+                    <IconComponent className="w-4 h-4" />
+                  </div>
+                  <span className="text-[9px] font-bold tracking-wide">{item.label}</span>
+                </button>
+              );
+            })}
           </div>
+        </div>
+
+        {/* Demo Credentials Tip */}
+        <div className="flex items-center gap-1.5 justify-center py-2 bg-amber-500/5 dark:bg-amber-500/10 rounded-xl text-[10px] font-bold text-amber-700 dark:text-amber-400 border border-amber-500/10">
+          <span>💡</span>
+          <span>Demo credentials loaded. Ready to Sign In!</span>
         </div>
 
         {/* Input Fields */}
